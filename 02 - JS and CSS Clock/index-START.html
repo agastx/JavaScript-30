@@ -6,7 +6,6 @@
 </head>
 <body>
 
-
     <div class="clock">
       <div class="clock-face">
         <div class="hand hour-hand"></div>
@@ -14,7 +13,6 @@
         <div class="hand second-hand"></div>
       </div>
     </div>
-
 
   <style>
     html {
@@ -62,12 +60,57 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0.57, 2.91, 1, 1);
+    }
+
+    .second-hand {
+      background: none;
+      border: 1px;
+      border-style: dashed;
+    }
+    .minute-hand {
+      background: white;
+    }
+    .hour-hand {
+      background: gray;
     }
 
   </style>
 
   <script>
+    const secondHand = document.querySelector('.second-hand');
+    const minuteHand = document.querySelector('.min-hand');
+    const hourHand = document.querySelector('.hour-hand');
+    const allHands = document.querySelectorAll('.hand');
 
+    function setDate() {
+      const now = new Date;
+
+      const seconds = now.getSeconds();
+      const secondsDegrees = ((seconds / 60) * 360) + 90;
+
+      const minutes = now.getMinutes();
+      const minutesDegrees = ((minutes / 60) * 360) + 90;
+
+      const hours = now.getHours();
+      const hoursDegrees = ((hours / 12) * 360) + 90;
+
+      if (secondsDegrees === 360) {
+        allHands.forEach(hand => hand.style.transition = 'all 0.05s');
+      }
+      secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+      minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
+      hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
+      if (secondsDegrees === 360) {
+        allHands.forEach(hand => hand.style.transition = 'none');
+      }
+      console.log(hours + ':' + minutes + ':' + seconds);
+    }
+
+    setInterval(setDate, 1000);
 
   </script>
 </body>
