@@ -4,3 +4,7 @@ node_modules/
 haters/
 .idea/
 .jsbeautifyrc
+.eslintrc.*
+.vscode
+package-lock.json
+package.json
