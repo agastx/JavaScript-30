@@ -3,7 +3,7 @@ node_modules/
 *.log
 haters/
 .idea/
-.jsbeautifyrc
+.prettierrc
 .eslintrc.*
 .vscode
 package-lock.json
