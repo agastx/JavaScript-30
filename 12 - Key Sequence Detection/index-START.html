@@ -6,7 +6,53 @@
   <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
 </head>
 <body>
+  <p>Try typing 'godmode' or a name, such as 'rick'</p>
+  <div class="rickframe"></div>
 <script>
+  const pressed = [];
+  const secretCode = 'godmode';
+  const secretCode2 = 'rick';
+  const rickframe = document.querySelector('.rickframe');
+
+  rickframe.addEventListener('mouseover', screenFX);
+  window.addEventListener('keyup', (e) => {
+    console.log(e.key);
+    pressed.push(e.key);
+    pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
+    if (pressed.join('').includes(secretCode)) {
+      screenFX();
+    }
+    if (pressed.join('').includes(secretCode2)) {
+      addVideo();
+    }
+    console.log(pressed);
+  });
+
+  function addVideo() {
+    const rroll = '' +
+      '<iframe ' +
+        'class="vimeo-embed" ' +
+        'src="https://player.vimeo.com/video/148751763?autoplay=1&loop=1&autopause=0" ' +
+        'width="500" height="281" frameborder="0" ' +
+        'allow="autoplay; fullscreen" allowfullscreen>' +
+      '</iframe>';
+    var rickdiv = document.querySelector('.rickframe');
+    rickframe.innerHTML += rroll;
+  }
+
+  function screenFX() {
+    random_bg_color();
+    cornify_add();
+  }
+
+  function random_bg_color() {
+    var x = Math.floor(Math.random() * 256);
+    var y = Math.floor(Math.random() * 256);
+    var z = Math.floor(Math.random() * 256);
+    var bgColor = "rgb(" + x + "," + y + "," + z + ")";
+    document.body.style.background = bgColor;
+  }
+
 </script>
 </body>
 </html>
