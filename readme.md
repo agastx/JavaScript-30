@@ -1,8 +1,8 @@
 # JavaScript30
 
-My repository for the JavaScript 30 Day Challenge solutions.
+My repository for the JavaScript 30 Day Challenge solutions. These were finished by me following along in the videos. Some solutions have other random stuff I added while messing around after the video.
 
-Excludes the finished versions, they can be obtained from the repository link below.
+The provided finished versions were removed, they can be obtained from the repository link below.
 
 All credit goes to the original author [@Wes Bos]( https://github.com/wesbos ).
 
