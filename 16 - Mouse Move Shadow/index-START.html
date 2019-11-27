@@ -5,7 +5,8 @@
   <title>Mouse Shadow</title>
 </head>
 <body>
-
+  <p style="z-index:10; position:fixed; font-size:x-small; left:0px; top:0px;" id="mouse-coords"></p>
+  <span id="mouse-splash"></span>
   <div class="hero">
     <h1 contenteditable>🔥WOAH!</h1>
   </div>
@@ -32,9 +33,93 @@
     text-shadow: 10px 10px 0 rgba(0,0,0,1);
     font-size: 100px;
   }
+  /*  Ripple */
+  .rippleEffect {
+    animation: rippleDrop .4s linear;
+  }
+
+  @keyframes rippleDrop {
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
   </style>
 
 <script>
+  const hero = document.querySelector('.hero');
+  const text = hero.querySelector('h1');
+  const walk = 250;
+  const mouseText = document.querySelector('#mouse-coords');
+  const mouseSplash = document.querySelector('#mouse-splash');
+  let mousePos = { x: 0, y: 0 };
+  let rgb = { r: 0, g: 0, b: 0 };
+
+  // Generate shadow around text
+  function shadow(e) {
+    const { offsetWidth: width, offsetHeight: height } = hero;
+    let { offsetX: x, offsetY: y } = e;
+
+    if (this !== event.target) {
+      x = x + e.target.offsetLeft;
+      y = y + e.target.offsetTop;
+    }
+
+    const xWalk = Math.round((x / width * walk) - (walk / 2));
+    const yWalk = Math.round((y / width * walk) - (walk / 2));
+
+    text.style.textShadow = `
+      ${xWalk}px ${yWalk}px 0 rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.7), 
+      ${xWalk * -1}px ${yWalk}px 0 rgba(${rgb.b}, ${rgb.r}, ${rgb.g}, 0.7),
+      ${yWalk}px ${xWalk * -1}px 0 rgba(${rgb.g}, ${rgb.b}, ${rgb.r}, 0.7),
+      ${yWalk * -1}px ${xWalk}px 0 rgba(${rgb.r}, ${rgb.b}, ${rgb.g}, 0.7)
+    `;
+  }
+
+  // Display mouse coordinates
+  function updateMouse(e) {
+    mouseText.style.left = `${e.x + 10}px`;
+    mouseText.style.top = `${e.y - 30}px`;
+    mouseText.innerHTML = `${e.x}, ${e.y}`;
+    mousePos.x = e.x;
+    mousePos.y = e.y;
+  }
+
+  // Add ripple effect to mouse click
+  function ripple() {
+    mouseSplash.setAttribute("style", `
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: rgba(${rgb.g},${rgb.r},${rgb.b},1);
+      transform: scale(0);
+      position: absolute;
+      opacity: 1;
+      left:${mousePos.x - 15}px; 
+      top:${mousePos.y - 15}px;
+    `);
+    mouseSplash.setAttribute("class", "rippleEffect");
+  }
+
+  // Cycle RGB colors & change background every 3 seconds
+  setInterval(function() {
+    rgb.r = Math.floor(Math.random() * 255);
+    rgb.g = Math.floor(Math.random() * 255);
+    rgb.b = Math.floor(Math.random() * 255);
+    hero.style.background = `rgba(${rgb.b}, ${rgb.g}, ${rgb.r}, 0.7)`;
+  }, 3000);
+
+  hero.addEventListener('mousemove', shadow);
+
+  document.body.addEventListener('mousemove', updateMouse);
+  document.body.addEventListener('mouseout', () => mouseText.innerHTML = '');
+  document.body.addEventListener('click', ripple);
+
+  mouseSplash.addEventListener('animationend', () => {
+    mouseSplash.removeAttribute("class");
+    mouseSplash.removeAttribute("style");    
+  });
+
 </script>
 </body>
 </html>
